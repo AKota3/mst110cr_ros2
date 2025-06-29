@@ -13,8 +13,8 @@ ekf_global:
         two_d_mode: true
 
         map_frame: map
-        odom_frame: mst110cr_tf/odom
-        base_link_frame: mst110cr_tf/base_link
+        odom_frame: mst110cr/odom
+        base_link_frame: mst110cr/base_link
         world_frame: map
 
 

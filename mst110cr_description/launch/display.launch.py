@@ -8,11 +8,10 @@ from launch.substitutions import Command, LaunchConfiguration
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
 
-
 def generate_launch_description():
-    mst110cr_description_path = get_package_share_path('mst110cr_description')
-    default_model_path = mst110cr_description_path / 'urdf/mst110cr.xacro'
-    default_rviz_config_path = mst110cr_description_path / 'rviz/urdf.rviz'
+    package_path = get_package_share_path('mst110cr_description')
+    default_model_path = package_path / 'urdf' / 'mst110cr.xacro'
+    default_rviz_config_path = package_path / 'rviz' / 'urdf.rviz'
 
     gui_arg = DeclareLaunchArgument(name='gui', default_value='true', choices=['true', 'false'],
                                     description='Flag to enable joint_state_publisher_gui')

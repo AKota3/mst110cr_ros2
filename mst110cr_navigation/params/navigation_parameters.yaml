@@ -5,7 +5,7 @@ amcl:
     alpha3: 0.2
     alpha4: 0.2
     alpha5: 0.2
-    base_frame_id: "mst110cr_tf/base_link"
+    base_frame_id: "mst110cr/base_link"
     beam_skip_distance: 0.5
     beam_skip_error_threshold: 0.9
     beam_skip_threshold: 0.3
@@ -19,7 +19,7 @@ amcl:
     max_beams: 60
     max_particles: 2000
     min_particles: 500
-    odom_frame_id: "mst110cr_tf/odom"
+    odom_frame_id: "mst110cr/odom"
     pf_err: 0.05
     pf_z: 0.99
     recovery_alpha_fast: 0.0
@@ -43,8 +43,12 @@ bt_navigator:
   ros__parameters:
     use_sim_time: False
     global_frame: map
-    robot_base_frame: mst110cr_tf/base_link
-    odom_topic: /mst110cr/odom_pose
+    robot_base_frame: mst110cr/base_link
+    odom_topic: /mst110cr/odom
+
+    default_nav_to_pose_bt_xml: "/mst110cr_navigation/params/mst110cr_navigate_to_pose_w_replanning_and_recovery.xml"
+    default_nav_through_poses_bt_xml: "/mst10cr_navigation/params/mst110cr_navigate_through_poses_w_replanning_and_recovery.xml"
+
     bt_loop_duration: 10
     default_server_timeout: 20
     # 'default_nav_through_poses_bt_xml' and 'default_nav_to_pose_bt_xml' are use defaults:
@@ -186,13 +190,13 @@ local_costmap:
       always_send_full_costmap: True
       use_sim_time: False
       footprint_padding: 0.5
-      global_frame: mst110cr_tf/odom
+      global_frame: mst110cr/odom
       height: 20
       width: 20
       observation_sources: scan
       publish_frequency: 10.0
       resolution: 0.05
-      robot_base_frame: mst110cr_tf/base_link
+      robot_base_frame: mst110cr/base_link
       rolling_window: true
       transform_tolerance: 0.5
       update_frequency: 10.0
@@ -264,7 +268,7 @@ global_costmap:
       origin_y: -20.0
       publish_frequency: 10.0
       resolution: 0.1
-      robot_base_frame: mst110cr_tf/base_link
+      robot_base_frame: mst110cr/base_link
       rolling_window: false
       transform_tolerance: 0.5
       update_frequency: 10.0
@@ -358,9 +362,9 @@ behavior_server:
       plugin: "nav2_behaviors/Wait"
     assisted_teleop:
       plugin: "nav2_behaviors/AssistedTeleop"
-    local_frame: mst110cr_tf/odom
+    local_frame: mst110cr/odom
     global_frame: map
-    robot_base_frame: mst110cr_tf/base_link
+    robot_base_frame: mst110cr/base_link
     transform_tolerance: 0.1
     simulate_ahead_time: 2.0
     max_rotational_vel: 1.0

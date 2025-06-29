@@ -67,34 +67,34 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        mst110cr_tf/base_link:
+        mst110cr/base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        mst110cr_tf/body_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        mst110cr_tf/cylinder_head_link:
+        mst110cr/body_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        mst110cr_tf/cylinder_rod_link:
+        mst110cr/cylinder_head_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        mst110cr_tf/left_sprocket_link:
+        mst110cr/cylinder_rod_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        mst110cr_tf/right_sprocket_link:
+          Value: true
+        mst110cr/left_sprocket_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        mst110cr_tf/vessel_pin_link:
+        mst110cr/right_sprocket_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        mst110cr/vessel_pin_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -263,9 +263,9 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        mst110cr_tf/base_link:
+        mst110cr/base_link:
           Value: true
-        mst110cr_tf/body_link:
+        mst110cr/body_link:
           Value: true
         map:
           Value: true
