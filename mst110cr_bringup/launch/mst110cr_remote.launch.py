@@ -8,7 +8,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 import xacro
 
 #plane=9
-robot_name="mst110cr"
+robot_name="mst110cr_2"
 use_namespace=True
 
 def generate_launch_description():
@@ -22,7 +22,7 @@ def generate_launch_description():
     gnss_localizer_ros2_launch_file_path=os.path.join(gnss_localizer_ros2, "launch","gnss_localizer_ros2.py")
     ekf_localization_launch_file_path=os.path.join(mst110cr_navigation_dir,"launch","ekf_localization.launch.py")
     mst110cr_navigation_launch_file_path=os.path.join(mst110cr_navigation_dir,"launch","mst110cr_navigation.launch.py")
-    mst110cr_standby_rviz_file = os.path.join(mst110cr_unity_dir, "rviz2", "mst110cr_standby.rviz")
+    mst110cr_standby_rviz_file = os.path.join(mst110cr_navigation_dir, "rviz2", "mst110cr_standby.rviz")
 
     doc = xacro.parse(open(xacro_model))
     xacro.process_doc(doc)
@@ -36,9 +36,6 @@ def generate_launch_description():
         IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(mst110cr_navigation_launch_file_path),
         ),
-        # IncludeLaunchDescription(
-        #         PythonLaunchDescriptionSource(gnss_localizer_ros2_launch_file_path),
-        # ),
 
         GroupAction([
             PushRosNamespace(
@@ -59,6 +56,7 @@ def generate_launch_description():
                            '--yaw','0', 
                            '--frame-id', 'world',
                            '--child-frame-id', 'map']),
+            
             Node(
                 package='robot_state_publisher',
                 executable='robot_state_publisher',

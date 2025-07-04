@@ -57,31 +57,31 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        mst110cr/base_link:
+        mst110cr_2/base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        mst110cr/body_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        mst110cr/track_link:
+        mst110cr_2/body_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        mst110cr/vessel_cylinder_link:
+        mst110cr_2/track_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        mst110cr/vessel_link:
+        mst110cr_2/vessel_cylinder_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        mst110cr/vessel_rod_link:
+        mst110cr_2/vessel_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        mst110cr_2/vessel_rod_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -99,17 +99,17 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: true
-        mst110cr/base_link:
+        mst110cr_2/base_link:
           Value: true
-        mst110cr/body_link:
+        mst110cr_2/body_link:
           Value: true
-        mst110cr/track_link:
+        mst110cr_2/track_link:
           Value: true
-        mst110cr/vessel_cylinder_link:
+        mst110cr_2/vessel_cylinder_link:
           Value: true
-        mst110cr/vessel_link:
+        mst110cr_2/vessel_link:
           Value: true
-        mst110cr/vessel_rod_link:
+        mst110cr_2/vessel_rod_link:
           Value: true
       Marker Scale: 1
       Name: TF
@@ -117,20 +117,20 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        mst110cr/base_link:
-          mst110cr/track_link:
-            mst110cr/body_link:
-              mst110cr/vessel_cylinder_link:
-                mst110cr/vessel_rod_link:
+        mst110cr_2/base_link:
+          mst110cr_2/track_link:
+            mst110cr_2/body_link:
+              mst110cr_2/vessel_cylinder_link:
+                mst110cr_2/vessel_rod_link:
                   {}
-              mst110cr/vessel_link:
+              mst110cr_2/vessel_link:
                 {}
       Update Interval: 0
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: mst110cr/base_link
+    Fixed Frame: mst110cr_2/base_link
     Frame Rate: 60
   Name: root
   Tools:

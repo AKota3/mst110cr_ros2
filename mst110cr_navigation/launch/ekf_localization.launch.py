@@ -8,7 +8,7 @@ from launch_ros.actions import Node, PushRosNamespace
 from launch.actions import DeclareLaunchArgument, GroupAction
 from launch.conditions import IfCondition
 
-robot_name="mst110cr"
+robot_name="mst110cr_2"
 use_namespace=True
 
 def generate_launch_description():
@@ -32,63 +32,52 @@ def generate_launch_description():
                 condition=IfCondition(str(use_namespace)),
                 namespace=robot_name),
             Node(
-                package='tf2_ros',
-                executable='static_transform_publisher',
-                name='world_to_map',
-                arguments=['--x', '0', 
-                            '--y', '0', 
-                            '--z', '0', 
-                            '--roll', '0', 
-                            '--pitch', '0', 
-                            '--yaw', '0', 
-                            '--frame-id', 'world',
-                            '--child-frame-id', 'map']
-            ),
-            Node(
                 package='mst110cr_navigation',
                 executable='odom_broadcaster',
                 name='odom_broadcaster',
                 output="screen",
-                parameters=[{'odom_topic': 'odom'},
-                            {'odom_frame': 'odom'},
-                            {'base_link_frame': 'base_link'}]
+                parameters=[{'odom_topic': 'odom_pose'},
+                            {'odom_frame': robot_name + '/odom'},
+                            {'base_link_frame': robot_name + '/base_link'}]
             ),            
             Node(
                 package='mst110cr_navigation',
                 executable='poseStamped2Odometry',
                 name='poseStamped2ground_truth_odom',
                 output="screen",
-                parameters=[{'odom_header_frame': "map",
-                                'odom_child_frame': "base_link",
-                                'poseStamped_topic_name': "base_link/pose",
-                                'odom_topic_name': "tracking/ground_truth",
-                                'use_sim_time': True}]
-            ),  
-            Node(
-                package='robot_state_publisher',
-                executable='robot_state_publisher',
-                output="screen",
-                parameters=[params, {'use_sim_time': True}],
-            ),             
-            Node(
-                package="mst110cr_navigation",
-                executable="poseStamped2Odometry",
-                name="poseStamped2Odometry",
-                parameters=[{'poseStamped_topic_name':'/mst110cr/global_pose',
-                             'odom_topic_name':'/mst110cr/gnss_odom',
-                             'odom_child_frame':'gnss',
-                             'odom_header_frame':'world'}],
-            ),
+                parameters=[{'odom_header_frame': "world",
+                                'odom_child_frame': robot_name + "/base_link",
+                                'poseStamped_topic_name': "global_pose",
+                                'odom_topic_name': "gnss_odom",
+                                'use_sim_time': False}]
+            ),            
+            # Node(
+            #     package='robot_localization',
+            #     executable='ekf_node',
+            #     name='ekf_global',
+            #     output="screen",
+            #     remappings=[('odometry/filtered','odometry/global'),
+            #                 ('odom0','odom_pose'),
+            #                 ('odom1','gnss_odom')],
+            #     parameters=[mst110cr_ekf_yaml_file,
+            #                                 {
+            #                                 'odom_frame' : robot_name + '/odom',
+            #                                 'base_link_frame' : robot_name + '/base_link',
+            #                                 'use_sim_time' : False,
+            #                                 'odom0' : robot_name + '/odom_pose',
+            #                                 'odom1' : robot_name + '/gnss_odom',
+            #                                 }]
+
             Node(
                 package='robot_localization',
                 executable='ekf_node',
                 name='ekf_global',
                 output="screen",
-                remappings=[('odometry/filtered','/mst110cr/odometry/global'),
-                            ('odom0','/mst110cr/odom_pose'),
-                            ('odom1','/mst110cr/gnss_odom')],
+                remappings=[('odometry/filtered','odometry/global'),
+                            ('odom0','/mst110cr_2/odom_pose'),
+                            ('odom1','/mst110cr_2/gnss_odom')],
                 parameters=[mst110cr_ekf_yaml_file,
-                                            {
+                                        {
                                             'debug': False,
                                             'frequency': 10.0,
                                             'transform_time_offset': 0.0,
@@ -103,7 +92,7 @@ def generate_launch_description():
                                             'base_link_frame' : robot_name + '/base_link',
                                             'world_frame' : 'map',
                                             'use_sim_time' : False,
-                                            'odom0' : '/mst110cr/odom_pose',
+                                            'odom0' : '/mst110cr_2/odom_pose',
                                             'odom0_config': [
                                                 True,  True,  False,
                                                 False, False, True,
@@ -111,7 +100,7 @@ def generate_launch_description():
                                                 False, False, False,
                                                 False, False, False],
                                             'odom0_differential': False,
-                                            'odom1' : '/mst110cr/gnss_odom',
+                                            'odom1' : '/mst110cr_2/gnss_odom',
                                             'odom1_config': [
                                                 True,  True,  True,
                                                 False, False, True,

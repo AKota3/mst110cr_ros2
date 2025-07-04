@@ -19,7 +19,7 @@ setup(
         (os.path.join('share', package_name, 'params'),glob('params/*.yaml')),
         (os.path.join('share', package_name, 'params'),glob('params/*.xml')),
         (os.path.join('share', package_name, 'parameters'),glob('parameters/*.yaml')),
-        (os.path.join('share', package_name, 'rviz'),glob('rviz/*.rviz')),
+        (os.path.join('share', package_name, 'rviz2'),glob('rviz2/*.rviz')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,

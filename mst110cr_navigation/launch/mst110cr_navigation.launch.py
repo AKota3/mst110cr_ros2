@@ -9,7 +9,7 @@ from nav2_common.launch import RewrittenYaml
 from launch.conditions import IfCondition
 
 
-robot_name="mst110cr"
+robot_name="mst110cr_2"
 use_autostart=True
 use_sim_time=False
 use_respawn=True
@@ -41,15 +41,15 @@ def generate_launch_description():
     
     configured_params = RewrittenYaml(
             source_file=navigation_parameters_yaml_file,
-            root_key='mst110cr',
+            root_key= robot_name,
             param_rewrites=param_substitutions,
             convert_types=True)
     
     #remappings = [('/tf', 'tf'),
     #              ('/tf_static', 'tf_static')]
     
-    remappings_mst110cr_tf=[('/mst110cr/tf','tf'),
-                         ('/mst110cr/tf_static', 'tf_static')]
+    remappings_mst110cr_tf=[('/mst110cr_2/tf','tf'),
+                         ('/mst110cr_2/tf_static', 'tf_static')]
     
     return LaunchDescription([
 
@@ -139,7 +139,7 @@ def generate_launch_description():
                 respawn=use_respawn,
                 respawn_delay=2.0,
                 parameters=[configured_params, {'use_sim_time': use_sim_time}],
-                remappings=remappings_mst110cr_tf+[('mst110cr/goal_pose','goal_pose')]),
+                remappings=remappings_mst110cr_tf+[('mst110cr_2/goal_pose','goal_pose')]),
             Node(
                 package='nav2_waypoint_follower',
                 executable='waypoint_follower',
