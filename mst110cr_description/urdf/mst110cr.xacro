@@ -167,4 +167,13 @@
 	</link>
 	<!-- }}} Vessel Rod ends here -->
 
+	<joint name="gnss_joint" type="fixed">
+		<origin xyz="1.42 0.60 2.20"/>
+		<axis xyz="0 0 1"/>
+		<parent link="mst110cr_2/body_link"/>
+		<child link="mst110cr_2/gnss_link"/>
+	</joint>
+
+	<link name="mst110cr_2/gnss_link"/>
+
 </robot>
