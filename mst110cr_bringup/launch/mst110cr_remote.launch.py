@@ -16,7 +16,7 @@ def generate_launch_description():
     mst110cr_description_dir=get_package_share_directory("mst110cr_description")
     mst110cr_navigation_dir=get_package_share_directory("mst110cr_navigation")
     gnss_localizer_ros2 = get_package_share_directory("gnss_localizer_ros2")
-    mst110cr_unity_dir=get_package_share_directory("mst110cr_unity")
+    # mst110cr_unity_dir=get_package_share_directory("mst110cr_unity")
     xacro_model = os.path.join(mst110cr_description_dir, "urdf", "mst110cr.xacro")
 
     gnss_localizer_ros2_launch_file_path=os.path.join(gnss_localizer_ros2, "launch","gnss_localizer_ros2.py")
