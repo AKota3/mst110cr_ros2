@@ -47,7 +47,8 @@ def generate_launch_description():
                 output="screen",
                 parameters=[{'odom_header_frame': "world",
                                 'odom_child_frame': robot_name + "/base_link",
-                                'poseStamped_topic_name': "global_pose",
+                                'poseStamped_topic_name': "base_link_pose_from_gnss",
+                                # 'poseStamped_topic_name': "global_pose",
                                 'odom_topic_name': "gnss_odom",
                                 'use_sim_time': False}]
             ),            
@@ -107,8 +108,17 @@ def generate_launch_description():
                                                 False, False, False,
                                                 False, False, False,
                                                 False, False, False],
-                                            'odom1_differential': False,
+                                            'odom1_differential': False
                                             }]
+                                            # ,
+                                            # 'imu0': '/mst110cr_2/imu',
+                                            # 'imu0_config': [
+                                            #     False, False, False,
+                                            #     False, False, True,
+                                            #     False, False, False,
+                                            #     False, False, False,
+                                            #     False, False, False]
+                                            # }]
             ),
         ])
     ])
