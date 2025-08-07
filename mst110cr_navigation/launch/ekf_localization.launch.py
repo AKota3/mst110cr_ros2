@@ -100,7 +100,7 @@ def generate_launch_description():
                                                 False, False, False,
                                                 False, False, False,
                                                 False, False, False],
-                                            'odom0_differential': False,
+                                            'odom0_differential': True,
                                             'odom1' : '/mst110cr_2/gnss_odom',
                                             'odom1_config': [
                                                 True,  True,  True,
@@ -108,17 +108,8 @@ def generate_launch_description():
                                                 False, False, False,
                                                 False, False, False,
                                                 False, False, False],
-                                            'odom1_differential': False
+                                            'odom1_differential': False,
                                             }]
-                                            # ,
-                                            # 'imu0': '/mst110cr_2/imu',
-                                            # 'imu0_config': [
-                                            #     False, False, False,
-                                            #     False, False, True,
-                                            #     False, False, False,
-                                            #     False, False, False,
-                                            #     False, False, False]
-                                            # }]
             ),
         ])
     ])
