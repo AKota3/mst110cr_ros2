@@ -30,12 +30,12 @@ def generate_launch_description():
 
     return LaunchDescription([
 
-        IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(ekf_localization_launch_file_path),
-        ),
-        IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(mst110cr_navigation_launch_file_path),
-        ),
+        # IncludeLaunchDescription(
+        #         PythonLaunchDescriptionSource(ekf_localization_launch_file_path),
+        # ),
+        # IncludeLaunchDescription(
+        #         PythonLaunchDescriptionSource(mst110cr_navigation_launch_file_path),
+        # ),
 
         GroupAction([
             PushRosNamespace(
@@ -44,25 +44,25 @@ def generate_launch_description():
 
             DeclareLaunchArgument('robot_name', default_value=robot_name),
 
-            Node(
-                package='tf2_ros',
-                executable='static_transform_publisher',
-                name='world_to_map',
-                arguments=['--x','21395.178', 
-                           '--y','14034.450', 
-                           '--z','28.552', 
-                           '--roll','0', 
-                           '--pitch','0', 
-                           '--yaw','0', 
-                           '--frame-id', 'world',
-                           '--child-frame-id', 'map']),
+            # Node(
+            #     package='tf2_ros',
+            #     executable='static_transform_publisher',
+            #     name='world_to_map',
+            #     arguments=['--x','21395.178', 
+            #                '--y','14034.450', 
+            #                '--z','28.552', 
+            #                '--roll','0', 
+            #                '--pitch','0', 
+            #                '--yaw','0', 
+            #                '--frame-id', 'world',
+            #                '--child-frame-id', 'map']),
             
-            Node(
-                package='robot_state_publisher',
-                executable='robot_state_publisher',
-                name='robot_state_publisher',
-                parameters=[params]
-            ),
+            # Node(
+            #     package='robot_state_publisher',
+            #     executable='robot_state_publisher',
+            #     name='robot_state_publisher',
+            #     parameters=[params]
+            # ),
             
             Node(
                 package="rviz2",
