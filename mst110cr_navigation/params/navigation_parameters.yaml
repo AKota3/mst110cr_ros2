@@ -322,16 +322,21 @@ map_saver:
     occupied_thresh_default: 0.65
     map_subscribe_transient_local: True
     
-planner_server:
-  ros__parameters:
-    expected_planner_frequency: 4.0
-    use_sim_time: False
-    planner_plugins: ["GridBased"]
-    GridBased:
-      plugin: "nav2_navfn_planner/NavfnPlanner"
-      tolerance: 0.5
-      use_astar: false
-      allow_unknown: true
+
+# Theta star planner (Global Path Planner)
+
+
+# NavFn planner (Global Path Planner)
+# planner_server:
+#   ros__parameters:
+#     expected_planner_frequency: 4.0
+#     use_sim_time: False
+#     planner_plugins: ["GridBased"]
+#     GridBased:
+#       plugin: "nav2_navfn_planner/NavfnPlanner"
+#       tolerance: 0.5
+#       use_astar: false
+#       allow_unknown: true
 
 smoother_server:
   ros__parameters:
