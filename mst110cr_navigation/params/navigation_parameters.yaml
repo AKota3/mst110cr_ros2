@@ -104,6 +104,8 @@ bt_navigator:
       - nav2_assisted_teleop_cancel_bt_node
       - nav2_drive_on_heading_cancel_bt_node
       - nav2_is_battery_charging_condition_bt_node
+      - logger_node
+      - within_goal_radius_node
 
 bt_navigator_navigate_through_poses_rclcpp_node:
   ros__parameters:
@@ -123,7 +125,7 @@ controller_server:
     failure_tolerance: 0.3
     progress_checker_plugin: "progress_checker"
     goal_checker_plugins: ["general_goal_checker"] # "precise_goal_checker"
-    controller_plugins: ["RPP", "RSC"]
+    controller_plugins: ["RPP", "RSC", "FollowPath"]
     odom_topic: /mst110cr_2/odom_pose
 
     # Progress checker parameters
@@ -256,6 +258,50 @@ controller_server:
       max_robot_pose_search_dist: 1.0  # 3.0 → 2.0（近傍点を確実に拾って急舵を防ぐ）
       transform_tolerance: 0.2
       stateful: true
+
+
+
+    FollowPath:
+      plugin: "dwb_core::DWBLocalPlanner"
+      debug_trajectory_details: false
+      min_vel_x: -3.0
+      min_vel_y: 0.0
+      max_vel_x: 3.0
+      max_vel_y: 0.0
+      max_vel_theta: 1.0
+      min_speed_xy: -2.0
+      max_speed_xy: 2.0
+      min_speed_theta: -1.0
+      max_speed_theta: 1.0
+      acc_lim_x: 3.0 
+      acc_lim_y: 0.0
+      acc_lim_theta: 3.1
+      decel_lim_x: -2.5
+      decel_lim_y: 0.0
+      decel_lim_theta: -3.2
+      vx_samples: 25
+      vy_samples: 5
+      vtheta_samples: 25
+      # sim_time: 30.0
+      sim_time: 1.7
+      linear_granularity: 0.05
+      angular_granularity: 0.025
+      transform_tolerance: 0.2
+      xy_goal_tolerance: 0.25
+      trans_stopped_velocity: 0.25
+      short_circuit_trajectory_evaluation: True
+      stateful: True
+      critics: ["RotateToGoal", "Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
+      BaseObstacle.scale: 0.02
+      PathAlign.scale: 32.0
+      PathAlign.forward_point_distance: 0.1
+      GoalAlign.scale: 24.0
+      GoalAlign.forward_point_distance: 0.1
+      PathDist.scale: 32.0
+      GoalDist.scale: 24.0
+      RotateToGoal.scale: 32.0
+      RotateToGoal.slowing_factor: 5.0
+      RotateToGoal.lookahead_time: -1.0
 
 local_costmap:
   local_costmap:

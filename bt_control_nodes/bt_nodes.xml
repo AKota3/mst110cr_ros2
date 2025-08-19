@@ -206,6 +206,11 @@
     <Action ID="RotateFwdBwdAlongTrackNode">
     </Action>
 
+    <Action ID="LoggerNode">
+        <input_port name="text">Output description</input_port>
+    </Action>
+
+
     <!-- ############################### CONDITION NODES ############################## -->
     <Condition ID="GoalReached">
         <input_port name="goal">Destination</input_port>
@@ -300,6 +305,13 @@
     </Decorator>
 
     <Decorator ID="GoalUpdatedController">
+    </Decorator>
+
+    <Decorator ID="WithinGoalRadius">
+        <input_port name="radius"></input_port>
+        <input_port name="goal"></input_port>
+        <input_port name="frame"></input_port>
+        <input_port name="use_xy_only"></input_port>
     </Decorator>
 
   </TreeNodesModel>
