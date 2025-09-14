@@ -32,15 +32,19 @@ def generate_launch_description():
 
         IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(mst110cr_com3_ros_launch_file),
+                # launch_arguments={'use_sim_time': 'true'}.items(),
         ),
         IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(gnss_localizer_ros2_launch_file_path),
+                # launch_arguments={'use_sim_time': 'true'}.items(),
         ),
         IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(ekf_localization_launch_file_path),
+                launch_arguments={'use_sim_time': 'false'}.items(),
         ),
         IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(mst110cr_navigation_launch_file_path),
+                launch_arguments={'use_sim_time': 'false'}.items(),
         ),
 
         GroupAction([
@@ -54,20 +58,34 @@ def generate_launch_description():
                 package='tf2_ros',
                 executable='static_transform_publisher',
                 name='world_to_map',
-                arguments=['--x','21395.178', 
-                           '--y','14034.450', 
-                           '--z','28.552', 
-                           '--roll','0', 
-                           '--pitch','0', 
-                           '--yaw','0', 
-                           '--frame-id', 'world',
-                           '--child-frame-id', 'map']),
+                arguments=[
+                    '--x','21395.178', 
+                    '--y','14034.450', 
+                    '--z','28.552', 
+                    '--roll','0', 
+                    '--pitch','0', 
+                    '--yaw','0', 
+                    '--frame-id', 'world',
+                    '--child-frame-id', 'map'
+                ],
+                parameters=[
+                    params,
+                    {
+                        'use_sim_time': True
+                    }
+                ]
+            ),
             
             Node(
                 package='robot_state_publisher',
                 executable='robot_state_publisher',
                 name='robot_state_publisher',
-                parameters=[params]
+                parameters=[
+                    params,
+                    {
+                    'use_sim_time': True
+                    }
+                ]
             ),
         ]),
     ])

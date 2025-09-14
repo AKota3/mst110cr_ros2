@@ -3,7 +3,7 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node, PushRosNamespace
-from launch.actions import GroupAction
+from launch.actions import DeclareLaunchArgument, GroupAction
 from launch.substitutions import LaunchConfiguration
 from nav2_common.launch import RewrittenYaml
 from launch.conditions import IfCondition
@@ -11,11 +11,16 @@ from launch.conditions import IfCondition
 
 robot_name="mst110cr_2"
 use_autostart=True
-use_sim_time=False
 use_respawn=True
 use_namespace=True
 
 def generate_launch_description():
+
+    DeclareLaunchArgument(
+        'use_sim_time',
+        default_value='false',
+        description='Use sim time if true'
+    ),
 
     mst110cr_navigation_dir=get_package_share_directory('mst110cr_navigation')
 
@@ -36,7 +41,6 @@ def generate_launch_description():
                     'velocity_smoother']
     
     param_substitutions = {
-        'use_sim_time': str(use_sim_time),
         'yaml_filename': map_yaml_file}
     
     configured_params = RewrittenYaml(
@@ -44,9 +48,6 @@ def generate_launch_description():
             root_key= robot_name,
             param_rewrites=param_substitutions,
             convert_types=True)
-    
-    #remappings = [('/tf', 'tf'),
-    #              ('/tf_static', 'tf_static')]
     
     remappings_mst110cr_tf=[('/mst110cr_2/tf','tf'),
                          ('/mst110cr_2/tf_static', 'tf_static')]
@@ -63,10 +64,16 @@ def generate_launch_description():
                 name='nav2_container',
                 package='rclcpp_components',
                 executable='component_container_isolated',
-                parameters=[configured_params, {'autostart': use_autostart},
-                                               {'use_sim_time':use_sim_time}],
+                parameters=[
+                    configured_params, 
+                    {
+                        'autostart': use_autostart,
+                        'use_sim_time': bool(LaunchConfiguration('use_sim_time'))
+                    }
+                ],
                 remappings=remappings_mst110cr_tf,
-                output='screen'),
+                output='screen'
+            ),
             
             #########################
             # Localization packages #
@@ -79,16 +86,28 @@ def generate_launch_description():
                 output='screen',
                 respawn=use_respawn,
                 respawn_delay=2.0,
-                parameters=[configured_params, {'use_sim_time': use_sim_time}],
-                remappings=remappings_mst110cr_tf),
+                parameters=[
+                    configured_params, 
+                    {
+                        'use_sim_time': bool(LaunchConfiguration('use_sim_time'))
+                    }
+                ],
+                remappings=remappings_mst110cr_tf
+            ),
+
             Node(
                 package='nav2_lifecycle_manager',
                 executable='lifecycle_manager',
                 name='lifecycle_manager_localization',
                 output='screen',
-                parameters=[{'use_sim_time': use_sim_time},
-                            {'autostart': use_autostart},
-                            {'node_names': lifecycle_nodes_localization}]),
+                parameters=[
+                    {
+                        'autostart': use_autostart,
+                        'node_names': lifecycle_nodes_localization,
+                        'use_sim_time': bool(LaunchConfiguration('use_sim_time'))
+                    }
+                ]
+            ),
 
             #######################
             # Navigation packages #
@@ -100,9 +119,15 @@ def generate_launch_description():
                 output='screen',
                 respawn=use_respawn,
                 respawn_delay=2.0,
-                parameters=[configured_params, {'use_sim_time': use_sim_time}],
+                parameters=[
+                    configured_params, 
+                    {
+                        'use_sim_time': bool(LaunchConfiguration('use_sim_time'))
+                    }
+                ],
                 remappings=remappings_mst110cr_tf + [('cmd_vel', 'cmd_vel_nav')]
-                ),
+            ),
+
             Node(
                 package='nav2_smoother',
                 executable='smoother_server',
@@ -110,8 +135,15 @@ def generate_launch_description():
                 output='screen',
                 respawn=use_respawn,
                 respawn_delay=2.0,
-                parameters=[configured_params, {'use_sim_time': use_sim_time}],
-                remappings=remappings_mst110cr_tf),
+                parameters=[
+                    configured_params, 
+                    {
+                        'use_sim_time': bool(LaunchConfiguration('use_sim_time'))
+                    }
+                ],
+                remappings=remappings_mst110cr_tf
+            ),
+
             Node(
                 package='nav2_planner',
                 executable='planner_server',
@@ -119,8 +151,15 @@ def generate_launch_description():
                 output='screen',
                 respawn=use_respawn,
                 respawn_delay=2.0,
-                parameters=[configured_params, {'use_sim_time': use_sim_time}],
-                remappings=remappings_mst110cr_tf),
+                parameters=[
+                    configured_params, 
+                    {
+                        'use_sim_time': bool(LaunchConfiguration('use_sim_time'))
+                    }
+                ],
+                remappings=remappings_mst110cr_tf
+            ),
+
             Node(
                 package='nav2_behaviors',
                 executable='behavior_server',
@@ -128,10 +167,16 @@ def generate_launch_description():
                 output='screen',
                 respawn=use_respawn,
                 respawn_delay=2.0,
-                parameters=[configured_params, {'use_sim_time': use_sim_time}],
+                parameters=[
+                    configured_params, 
+                    {
+                        'use_sim_time': bool(LaunchConfiguration('use_sim_time'))
+                    }
+                ],
                 # remappings=remappings_mst110cr_tf +
                 #            [('cmd_vel', '/cmd_vel')]
-                ),
+            ),
+
             Node(
                 package='nav2_bt_navigator',
                 executable='bt_navigator',
@@ -139,8 +184,15 @@ def generate_launch_description():
                 output='screen',
                 respawn=use_respawn,
                 respawn_delay=2.0,
-                parameters=[configured_params, {'use_sim_time': use_sim_time}],
-                remappings=remappings_mst110cr_tf+[('mst110cr_2/goal_pose','goal_pose')]),
+                parameters=[
+                    configured_params, 
+                    {
+                        'use_sim_time': bool(LaunchConfiguration('use_sim_time'))
+                    }
+                ],
+                remappings=remappings_mst110cr_tf+[('mst110cr_2/goal_pose','goal_pose')]
+            ),
+
             Node(
                 package='nav2_waypoint_follower',
                 executable='waypoint_follower',
@@ -148,8 +200,14 @@ def generate_launch_description():
                 output='screen',
                 respawn=use_respawn,
                 respawn_delay=2.0,
-                parameters=[configured_params],
+                parameters=[
+                    configured_params, 
+                    {
+                        'use_sim_time': bool(LaunchConfiguration('use_sim_time'))
+                    }
+                ],
                 remappings=remappings_mst110cr_tf),
+
             Node(
                 package='nav2_velocity_smoother',
                 executable='velocity_smoother',
@@ -157,19 +215,31 @@ def generate_launch_description():
                 output='screen',
                 respawn=use_respawn,
                 respawn_delay=2.0,
-                parameters=[configured_params, {'use_sim_time': use_sim_time}],
+                parameters=[
+                    configured_params, 
+                    {
+                        'use_sim_time': bool(LaunchConfiguration('use_sim_time'))
+                    }
+                ],
                 remappings=remappings_mst110cr_tf +
                         [('cmd_vel', 'cmd_vel_nav'), 
                          ('cmd_vel_smoothed', 'cmd_vel')]
             ),
+
             Node(
                 package='nav2_lifecycle_manager',
                 executable='lifecycle_manager',
                 name='lifecycle_manager_navigation',
                 output='screen',
-                parameters=[{'use_sim_time': use_sim_time},
-                            {'autostart': use_autostart},
-                            {'node_names': lifecycle_nodes_navigation}]),
+                parameters=[
+                    configured_params, 
+                    {
+                        'use_sim_time': bool(LaunchConfiguration('use_sim_time')),
+                        'autostart': use_autostart,
+                        'node_names': lifecycle_nodes_navigation
+                    }
+                ],
+            ),
             
         ])
     ])

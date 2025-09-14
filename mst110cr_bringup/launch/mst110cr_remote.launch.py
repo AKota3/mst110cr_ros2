@@ -68,6 +68,13 @@ def generate_launch_description():
                 package="rviz2",
                 executable="rviz2",
                 name="rviz",
-                arguments=["--display-config", mst110cr_standby_rviz_file]),
+                arguments=["--display-config", mst110cr_standby_rviz_file],
+                parameters=[
+                    {
+                        'use_sim_time': False
+                    }
+                ]
+            )
+            
         ]),
     ])
