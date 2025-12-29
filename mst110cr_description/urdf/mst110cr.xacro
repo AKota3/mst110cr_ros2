@@ -2,15 +2,22 @@
 <robot name="mst110cr" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
 	<!-- Base Link -->
-	<link name="mst110cr_2/base_link"/>
+
+  <xacro:arg name="prefix" default="mst110cr_2"/>
+  <xacro:property name="prefix" value="$(arg prefix)"/>
+
+  <xacro:arg name="prefix" default="mst110cr_2"/>
+
+
+	<link name="${prefix}/base_link"/>
 
 	<!-- Track {{{ -->
 	<joint name="base_joint" type="fixed">
-		<parent link="mst110cr_2/base_link"/>
-		<child link="mst110cr_2/track_link"/>
+		<parent link="${prefix}/base_link"/>
+		<child link="${prefix}/track_link"/>
 	</joint>
 
-	<link name="mst110cr_2/track_link">
+	<link name="${prefix}/track_link">
 		<visual>
 			<geometry>
 				<mesh filename="package://mst110cr_description/meshes/mst110cr-crawler.dae"/>
@@ -37,11 +44,11 @@
 	<joint name="swing_joint" type="continuous">
 		<origin xyz="0 0 1"/>
 		<axis xyz="0 0 1"/>
-		<parent link="mst110cr_2/track_link"/>
-		<child link="mst110cr_2/body_link"/>
+		<parent link="${prefix}/track_link"/>
+		<child link="${prefix}/body_link"/>
 	</joint>
 
-	<link name="mst110cr_2/body_link">
+	<link name="${prefix}/body_link">
 		<visual>
 			<origin xyz="0 0 0"/>
 			<geometry>
@@ -70,12 +77,12 @@
 	<joint name="vessel_pin_joint" type="revolute">
 		<origin xyz="-2.389 0 0.562"/>
 		<axis xyz="0 1 0"/>
-		<parent link="mst110cr_2/body_link"/>
-		<child link="mst110cr_2/vessel_link"/>
+		<parent link="${prefix}/body_link"/>
+		<child link="${prefix}/vessel_link"/>
 		<limit lower="${radians(-60)}" upper="${radians(0)}" effort="500" velocity="6.159937255"/>
 	</joint>
 
-	<link name="mst110cr_2/vessel_link">
+	<link name="${prefix}/vessel_link">
 		<visual>
 			<origin xyz="0 0 0"/>
 			<geometry>
@@ -103,12 +110,12 @@
 	<joint name="vessel_cylinder_joint" type="continuous">
 		<origin xyz="-1.891 0 0.293"/>
 		<axis xyz="0 1 0"/>
-		<parent link="mst110cr_2/body_link"/>
-		<child link="mst110cr_2/vessel_cylinder_link"/>
+		<parent link="${prefix}/body_link"/>
+		<child link="${prefix}/vessel_cylinder_link"/>
 		<mimic joint="vessel_pin_joint" multiplier="${66/60}"/>
 	</joint>
 
-	<link name="mst110cr_2/vessel_cylinder_link">
+	<link name="${prefix}/vessel_cylinder_link">
 		<visual>
 			<origin xyz="0 0 0"/>
 			<geometry>
@@ -136,13 +143,13 @@
 	<joint name="vessel_rod_joint" type="prismatic">
 		<origin xyz="0 0 0"/>
 		<axis xyz="1.039 0 0.282"/>
-		<parent link="mst110cr_2/vessel_cylinder_link"/>
-		<child link="mst110cr_2/vessel_rod_link"/>
+		<parent link="${prefix}/vessel_cylinder_link"/>
+		<child link="${prefix}/vessel_rod_link"/>
 		<limit lower="0" upper="0.6" effort="500" velocity="6.159937255"/>
 		<mimic joint="vessel_pin_joint" multiplier="${0.6/radians(-60)}"/>
 	</joint>
 
-	<link name="mst110cr_2/vessel_rod_link">
+	<link name="${prefix}/vessel_rod_link">
 		<visual>
 			<origin xyz="0 0 0"/>
 			<geometry>
@@ -170,10 +177,10 @@
 	<joint name="gnss_joint" type="fixed">
 		<origin xyz="1.42 0.60 2.20"/>
 		<axis xyz="0 0 1"/>
-		<parent link="mst110cr_2/body_link"/>
-		<child link="mst110cr_2/gnss_link"/>
+		<parent link="${prefix}/body_link"/>
+		<child link="${prefix}/gnss_link"/>
 	</joint>
 
-	<link name="mst110cr_2/gnss_link"/>
+	<link name="${prefix}/gnss_link"/>
 
 </robot>
