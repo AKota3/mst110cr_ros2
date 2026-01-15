@@ -45,17 +45,23 @@ def generate_launch_description():
             ),
 
             Node(
-                package='mst110cr_navigation',
-                executable='poseStamped2Odometry',
-                name='poseStamped2ground_truth_odom',
-                output="screen",
-                parameters=[{
-                    'odom_header_frame': "world",
-                    'odom_child_frame': [robot_name, "/base_link"],
-                    'poseStamped_topic_name': "base_link_pose_from_gnss",
-                    'odom_topic_name': "gnss_odom",
-                    'use_sim_time': use_sim_time
-                }]
+                package = 'd37pxi_navigation',
+                executable = 'message_converter_odom',
+                name = "message_converter_odom",
+                output = "screen",
+                parameters=[{'input_topic': "odom_pose",
+                            'output_topic': 'fixed_odom_pose',
+                            'use_sim_time': use_sim_time}],
+            ),
+
+            Node(
+                package = 'mst110cr_navigation',
+                executable = 'message_converter_gnss',
+                name = "message_converter_gnss",
+                output = "screen",
+                parameters=[{'input_topic': 'global_pose',
+                            'output_topic': 'fixed_global_pose',
+                            'use_sim_time': use_sim_time}],
             ),
 
             Node(
@@ -83,7 +89,7 @@ def generate_launch_description():
                     'world_frame': 'map',
                     'use_sim_time': use_sim_time,
 
-                    'odom0': 'odom_pose',
+                    'odom0': 'fixed_odom_pose',
                     'odom0_config': [
                         True,  True,  False,
                         False, False, True,
@@ -92,7 +98,7 @@ def generate_launch_description():
                         False, False, False],
                     'odom0_differential': True,
 
-                    'odom1': 'gnss_odom',
+                    'odom1': 'fixed_global_pose',
                     'odom1_config': [
                         True,  True,  True,
                         False, False, True,

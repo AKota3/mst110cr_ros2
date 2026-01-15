@@ -33,6 +33,8 @@ setup(
             'poseStamped2Odometry = mst110cr_navigation.poseStamped2Odometry:main',
             'odom_broadcaster = mst110cr_navigation.odom_broadcaster:main',
             'map_generator = mst110cr_navigation.map_generator:main',
+            'message_converter_gnss = mst110cr_navigation.message_converter_gnss:main',
+            'message_converter_odom = mst110cr_navigation.message_converter_odom:main',
         ],
     },
 )

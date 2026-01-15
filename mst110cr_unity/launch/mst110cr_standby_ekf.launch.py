@@ -15,7 +15,6 @@ from launch_ros.parameter_descriptions import ParameterValue
 def generate_launch_description():
 
     mst110cr_navigation_dir = get_package_share_directory("mst110cr_navigation")
-    mst110cr_unity_dir = get_package_share_directory("mst110cr_unity")
 
     ekf_localization_launch_file_path = os.path.join(
         mst110cr_navigation_dir, "launch", "ekf_localization.launch.py"
@@ -25,10 +24,9 @@ def generate_launch_description():
     )
 
     mst110cr_standby_rviz_file_path = os.path.join(
-        mst110cr_unity_dir, "rviz2", "mst110cr_standby.rviz"
+        mst110cr_navigation_dir, "rviz2", "mst110cr_navigation_sim.rviz"
     )
 
-    # ---- Launch Arguments ----
     robot_name_arg = DeclareLaunchArgument('robot_name', default_value='mst110cr')
     use_namespace_arg = DeclareLaunchArgument('use_namespace', default_value='true')
     use_sim_time_arg = DeclareLaunchArgument('use_sim_time', default_value='true')
@@ -42,11 +40,11 @@ def generate_launch_description():
     use_navigation_xy_goal_tolerance = LaunchConfiguration('navigation_xy_goal_tolerance')
     use_navigation_yaw_goal_tolerance = LaunchConfiguration('navigation_yaw_goal_tolerance')
 
-    # ---- robot_description (xacro) ----
+
     xacro_file = PathJoinSubstitution([
         FindPackageShare('mst110cr_description'),
         'urdf',
-        'mst110cr_for_sim.xacro'
+        'mst110cr.xacro'
     ])
 
     robot_description = {
@@ -68,32 +66,31 @@ def generate_launch_description():
         use_navigation_xy_goal_tolerance_arg,
         use_navigation_yaw_goal_tolerance_arg,
 
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(ekf_localization_launch_file_path),
+            launch_arguments={
+                'robot_name': robot_name,
+                'use_namespace': 'true',
+                'use_sim_time': use_sim_time,
+            }.items(),
+        ),
+
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(mst110cr_navigation_launch_file_path),
+            launch_arguments={
+                'robot_name': robot_name,
+                'use_namespace': 'true',
+                'use_sim_time': use_sim_time,
+                'navigation_xy_goal_tolerance': use_navigation_xy_goal_tolerance,
+                'navigation_yaw_goal_tolerance': use_navigation_yaw_goal_tolerance
+            }.items(),
+        ),
+
         GroupAction([
 
             PushRosNamespace(
                 condition=IfCondition(use_namespace),
                 namespace=robot_name
-            ),
-
-            IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(ekf_localization_launch_file_path),
-                launch_arguments={
-                    'robot_name': robot_name,
-                    'use_namespace': 'false',
-                    'use_sim_time': use_sim_time,
-                }.items(),
-            ),
-
-            IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(mst110cr_navigation_launch_file_path),
-                launch_arguments={
-                    'robot_name': robot_name,
-                    'use_namespace': 'false',
-                    'use_sim_time': use_sim_time,
-                    'default_nav_to_pose_bt_xml': "/params/mst110cr_navigate_to_pose_w_replanning_and_recovery_for_sim.xml",
-                    'navigation_xy_goal_tolerance': use_navigation_xy_goal_tolerance,
-                    'navigation_yaw_goal_tolerance': use_navigation_yaw_goal_tolerance
-                }.items(),
             ),
 
             Node(
@@ -105,20 +102,23 @@ def generate_launch_description():
                     '--roll','0','--pitch','0','--yaw','0',
                     '--frame-id','world',
                     '--child-frame-id','map'
-                ]
+                ],
+                parameters=[{'use_sim_time': use_sim_time}],
             ),
 
             Node(
                 package='robot_state_publisher',
                 executable='robot_state_publisher',
                 name='robot_state_publisher',
-                parameters=[robot_description]
+                parameters=[robot_description, {'use_sim_time': use_sim_time}],
             ),
 
             Node(
                 package="rviz2",
                 executable="rviz2",
                 name="rviz",
-                arguments=["--display-config", mst110cr_standby_rviz_file_path]),
+                arguments=["--display-config", mst110cr_standby_rviz_file_path],
+                parameters=[{'use_sim_time': use_sim_time}],
+            ),
         ]),
     ])

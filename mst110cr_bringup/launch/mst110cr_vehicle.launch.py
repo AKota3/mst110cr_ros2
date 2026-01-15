@@ -5,6 +5,7 @@ from launch.actions import GroupAction, IncludeLaunchDescription, DeclareLaunchA
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node, PushRosNamespace
 from launch.conditions import IfCondition
+from launch.substitutions import LaunchConfiguration
 import xacro
 
 robot_name="mst110cr_2"
@@ -12,6 +13,9 @@ use_namespace=True
 
 def generate_launch_description():
 
+    use_navigation_xy_goal_tolerance_arg = DeclareLaunchArgument('navigation_xy_goal_tolerance', default_value='1.0')
+    use_navigation_yaw_goal_tolerance_arg = DeclareLaunchArgument('navigation_yaw_goal_tolerance', default_value='0.15')    
+    
     mst110cr_com3_ros_dir = get_package_share_directory("mst110cr_com3ros")
     gnss_localizer_ros2 = get_package_share_directory("gnss_localizer_ros2")
     mst110cr_navigation_dir=get_package_share_directory("mst110cr_navigation")
@@ -27,8 +31,12 @@ def generate_launch_description():
     xacro.process_doc(doc)
     params = {'robot_description': doc.toxml()}
 
+    use_navigation_xy_goal_tolerance = LaunchConfiguration('navigation_xy_goal_tolerance')
+    use_navigation_yaw_goal_tolerance = LaunchConfiguration('navigation_yaw_goal_tolerance')
 
     return LaunchDescription([
+        use_navigation_xy_goal_tolerance_arg,
+        use_navigation_yaw_goal_tolerance_arg,
 
         IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(mst110cr_com3_ros_launch_file),
@@ -38,13 +46,25 @@ def generate_launch_description():
                 PythonLaunchDescriptionSource(gnss_localizer_ros2_launch_file_path),
                 # launch_arguments={'use_sim_time': 'true'}.items(),
         ),
+
         IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(ekf_localization_launch_file_path),
-                launch_arguments={'use_sim_time': 'false'}.items(),
+            PythonLaunchDescriptionSource(ekf_localization_launch_file_path),
+            launch_arguments={
+                'robot_name': robot_name,
+                'use_namespace': 'true',
+                'use_sim_time': 'false',
+            }.items(),
         ),
+
         IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(mst110cr_navigation_launch_file_path),
-                launch_arguments={'use_sim_time': 'false'}.items(),
+            PythonLaunchDescriptionSource(mst110cr_navigation_launch_file_path),
+            launch_arguments={
+                'robot_name': robot_name,
+                'use_namespace': 'true',
+                'use_sim_time': 'false',
+                'navigation_xy_goal_tolerance': use_navigation_xy_goal_tolerance,
+                'navigation_yaw_goal_tolerance': use_navigation_yaw_goal_tolerance
+            }.items(),
         ),
 
         GroupAction([

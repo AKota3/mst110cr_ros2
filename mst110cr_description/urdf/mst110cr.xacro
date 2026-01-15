@@ -6,8 +6,6 @@
   <xacro:arg name="prefix" default="mst110cr_2"/>
   <xacro:property name="prefix" value="$(arg prefix)"/>
 
-  <xacro:arg name="prefix" default="mst110cr_2"/>
-
 
 	<link name="${prefix}/base_link"/>
 
@@ -41,7 +39,7 @@
 	<!-- }}} Track ends here -->
 
 	<!-- Body {{{ -->
-	<joint name="swing_joint" type="continuous">
+	<joint name="rotate_joint" type="continuous">
 		<origin xyz="0 0 1"/>
 		<axis xyz="0 0 1"/>
 		<parent link="${prefix}/track_link"/>

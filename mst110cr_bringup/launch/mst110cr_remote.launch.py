@@ -22,7 +22,7 @@ def generate_launch_description():
     gnss_localizer_ros2_launch_file_path=os.path.join(gnss_localizer_ros2, "launch","gnss_localizer_ros2.py")
     ekf_localization_launch_file_path=os.path.join(mst110cr_navigation_dir,"launch","ekf_localization.launch.py")
     mst110cr_navigation_launch_file_path=os.path.join(mst110cr_navigation_dir,"launch","mst110cr_navigation.launch.py")
-    mst110cr_standby_rviz_file = os.path.join(mst110cr_navigation_dir, "rviz2", "mst110cr_standby.rviz")
+    mst110cr_navigation_rviz_file = os.path.join(mst110cr_navigation_dir, "rviz2", "mst110cr_navigation.rviz")
 
     doc = xacro.parse(open(xacro_model))
     xacro.process_doc(doc)
@@ -68,7 +68,7 @@ def generate_launch_description():
                 package="rviz2",
                 executable="rviz2",
                 name="rviz",
-                arguments=["--display-config", mst110cr_standby_rviz_file],
+                arguments=["--display-config", mst110cr_navigation_rviz_file],
                 parameters=[
                     {
                         'use_sim_time': False
