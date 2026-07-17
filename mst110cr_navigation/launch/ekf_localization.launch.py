@@ -45,7 +45,7 @@ def generate_launch_description():
             ),
 
             Node(
-                package = 'd37pxi_navigation',
+                package = 'mst110cr_navigation',
                 executable = 'message_converter_odom',
                 name = "message_converter_odom",
                 output = "screen",
