@@ -53,6 +53,8 @@ def generate_launch_description():
             # map yaml
             'yaml_filename': map_yaml_file,
 
+            "default_nav_through_poses_bt_xml": os.path.join(mst110cr_navigation_dir, "params", "mst110cr_navigate_through_poses_w_replanning_and_recovery.xml"), 
+
             # bt_navigator
             'bt_navigator.ros__parameters.robot_base_frame': [robot_name, '/base_link'],
             'bt_navigator.ros__parameters.odom_topic': [robot_name, '/odom_pose'],
@@ -74,7 +76,7 @@ def generate_launch_description():
             'local_costmap.local_costmap.ros__parameters.robot_base_frame': [robot_name, '/base_link'],
             'global_costmap.global_costmap.ros__parameters.robot_base_frame': [robot_name, '/base_link'],
         }
-
+        
         configured_params = RewrittenYaml(
             source_file=nav_params_file,
             root_key=robot_name,

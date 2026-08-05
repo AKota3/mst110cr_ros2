@@ -57,13 +57,19 @@ public:
     return {
       InputPort<geometry_msgs::msg::PoseStamped>("goal", "目標Pose (PoseStamped)"),
       InputPort<double>("radius", 1.0, "半径[m]（この以内で子を起動）"),
-      InputPort<std::string>("frame", "base_link", "判定対象フレーム名"),
+      // InputPort<std::string>("frame", "base_link", "判定対象フレーム名"),
+      InputPort<std::string>("frame", "mst110cr_2/base_link"),
       InputPort<bool>("use_xy_only", true, "XY平面のみで距離判定するか")
     };
   }
 
   NodeStatus tick() override
   {
+    std::string frame = "mst110cr_2/base_link";
+    getInput("frame", frame);
+
+    RCLCPP_ERROR(node_->get_logger(), "WithinGoalRadius frame = %s", frame.c_str());
+
     if (!engaged_)
     {
       geometry_msgs::msg::PoseStamped goal;
