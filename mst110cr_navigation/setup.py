@@ -18,6 +18,7 @@ setup(
         (os.path.join('share', package_name, 'map'),glob('map/*.yaml')),
         (os.path.join('share', package_name, 'params'),glob('params/*.yaml')),
         (os.path.join('share', package_name, 'params'),glob('params/*.xml')),
+        (os.path.join('share', package_name, 'params'), glob('params/*.xml.in')),
         (os.path.join('share', package_name, 'parameters'),glob('parameters/*.yaml')),
         (os.path.join('share', package_name, 'rviz2'),glob('rviz2/*.rviz')),
     ],

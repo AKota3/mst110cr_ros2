@@ -1,4 +1,5 @@
 import os
+import tempfile
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
@@ -49,11 +50,36 @@ def generate_launch_description():
         use_sim_bool = use_sim_time_str in ('true', '1', 'yes', 'y', 'on')
         nav_params_file = navigation_parameters_sim_yaml_file if use_sim_bool else navigation_parameters_yaml_file
 
+        template_bt = os.path.join(mst110cr_navigation_dir, "params", "mst110cr_navigate_through_poses_w_replanning_and_recovery.xml.in")
+
+        # robot_name を文字列として取得
+        robot_name_str = robot_name.perform(context)
+
+        # 出力するBT XML
+        generated_bt = os.path.join(
+            tempfile.gettempdir(),
+            f"{robot_name_str}_navigate_through_poses.xml"
+        )
+
+        # テンプレートを読み込み
+        with open(template_bt, "r") as f:
+            bt_xml = f.read()
+
+        # @ROBOT_NAME@ を置換
+        bt_xml = bt_xml.replace("@ROBOT_NAME@", robot_name_str)
+
+        # 生成したXMLを書き込み
+        with open(generated_bt, "w") as f:
+            f.write(bt_xml)
+
+
         param_substitutions = {
             # map yaml
             'yaml_filename': map_yaml_file,
 
-            "default_nav_through_poses_bt_xml": os.path.join(mst110cr_navigation_dir, "params", "mst110cr_navigate_through_poses_w_replanning_and_recovery.xml"), 
+            # "default_nav_through_poses_bt_xml": os.path.join(mst110cr_navigation_dir, "params", "mst110cr_navigate_through_poses_w_replanning_and_recovery.xml"), 
+
+            "default_nav_through_poses_bt_xml": generated_bt,
 
             # bt_navigator
             'bt_navigator.ros__parameters.robot_base_frame': [robot_name, '/base_link'],
